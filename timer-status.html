@@ -1,10 +1,37 @@
+<script type="text/html" data-template-name="timer-status">
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+    <div class="form-row">
+        <label for="node-input-duration"><i class="fa fa-clock-o"></i> Duration (seconds)</label>
+        <input type="number" id="node-input-duration" placeholder="Duration in seconds">
+    </div>
+    <div class="form-row">
+        <label for="node-input-triggerValue"><i class="fa fa-sign-in"></i> Trigger Value</label>
+        <select id="node-input-triggerValue">
+            <option value="0">0</option>
+            <option value="1">1</option>
+        </select>
+    </div>
+    <div class="form-row">
+        <label for="node-input-outputValue"><i class="fa fa-sign-out"></i> Triggered Output Value</label>
+        <select id="node-input-outputValue">
+            <option value="0">0</option>
+            <option value="1">1</option>
+        </select>
+    </div>
+</script>
+
 <script type="text/javascript">
     RED.nodes.registerType('timer-status',{
         category: 'function',
         color: '#a6bbcf',
         defaults: {
             name: {value:""},
-            duration: {value:900, required:true, validate:RED.validators.number()}
+            duration: {value:900, required:true, validate:RED.validators.number()},
+            triggerValue: {value:"0", required:true},
+            outputValue: {value:"0", required:true}
         },
         inputs:1,
         outputs:1,
@@ -16,23 +43,18 @@
     });
 </script>
 
-<script type="text/html" data-template-name="timer-status">
-    <div class="form-row">
-        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
-        <input type="text" id="node-input-name" placeholder="Name">
-    </div>
-    <div class="form-row">
-        <label for="node-input-duration"><i class="fa fa-clock-o"></i> Duration (seconds)</label>
-        <input type="number" id="node-input-duration" placeholder="Duration in seconds">
-    </div>
-</script>
-
 <script type="text/html" data-help-name="timer-status">
-    <p>A node that starts a timer when it receives a 0 and resets when it receives a 1.</p>
+    <p>A configurable timer node that can be triggered by either 0 or 1 and output either 0 or 1 when triggered.</p>
+    <p>Configuration:</p>
+    <ul>
+        <li>Duration: The time to wait before triggering</li>
+        <li>Trigger Value: The input value (0 or 1) that starts the timer</li>
+        <li>Triggered Output Value: The output value (0 or 1) when the timer is triggered</li>
+    </ul>
     <p>The node status shows:</p>
     <ul>
         <li>Red: Idle</li>
         <li>Yellow: Timer running</li>
-        <li>Green: Timer triggered</li>
+        <li>Green: Triggered</li>
     </ul>
 </script>

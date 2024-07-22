@@ -7,19 +7,24 @@ module.exports = function(RED) {
 
         node.status({fill:"red",shape:"dot",text:"Idle"});
 
+        function sendOutput(triggered) {
+            var output = triggered ? parseInt(config.outputValue) : 1 - parseInt(config.outputValue);
+            node.send({payload: output});
+            node.warn("Sending output: " + output);
+        }
+
         node.on('input', function(msg) {
-            if (msg.payload === 0) { // Start timer
+            if (msg.payload === parseInt(config.triggerValue)) { // Start timer
                 clearTimeout(timer);
                 node.status({fill:"yellow",shape:"dot",text:"Running"});
                 timer = setTimeout(function() {
                     node.status({fill:"green",shape:"dot",text:"Triggered"});
-                    var outputMsg = {payload: config.outputValue === "1" ? 1 : 0};
-                    node.send(outputMsg);
-                    node.warn("Timer triggered. Sending: " + JSON.stringify(outputMsg));
+                    sendOutput(true); // Triggered state
                 }, duration);
-            } else if (msg.payload === 1) { // Reset timer
+            } else if (msg.payload === 1 - parseInt(config.triggerValue)) { // Reset timer
                 clearTimeout(timer);
                 node.status({fill:"red",shape:"dot",text:"Idle"});
+                sendOutput(false); // Idle state
             }
         });
 
@@ -37,8 +42,9 @@ module.exports = function(RED) {
                 validate: function(v) {
                     return !isNaN(v) && Number.isInteger(parseFloat(v));
                 }
-            }
+            },
+            triggerValue: { value: "0", required: true },
+            outputValue: { value: "0", required: true }
         }
     });
-    
 }
