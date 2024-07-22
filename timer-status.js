@@ -28,8 +28,15 @@ module.exports = function(RED) {
 
     RED.nodes.registerType("timer-status", TimerStatusNode, {
         defaults: {
-            name: {value:""},
-            duration: {value:900, required:true, validate:RED.validators.number()}
+            name: { value: "" },
+            duration: { 
+                value: 900, 
+                required: true, 
+                validate: function(v) {
+                    return !isNaN(v) && Number.isInteger(parseFloat(v));
+                }
+            }
         }
     });
+    
 }
