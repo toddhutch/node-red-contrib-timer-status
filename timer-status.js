@@ -13,7 +13,9 @@ module.exports = function(RED) {
                 node.status({fill:"yellow",shape:"dot",text:"Running"});
                 timer = setTimeout(function() {
                     node.status({fill:"green",shape:"dot",text:"Triggered"});
-                    node.send(msg);
+                    var outputMsg = {payload: config.outputValue === "1" ? 1 : 0};
+                    node.send(outputMsg);
+                    node.warn("Timer triggered. Sending: " + JSON.stringify(outputMsg));
                 }, duration);
             } else if (msg.payload === 1) { // Reset timer
                 clearTimeout(timer);
