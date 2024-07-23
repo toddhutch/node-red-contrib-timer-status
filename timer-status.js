@@ -28,6 +28,9 @@ module.exports = function(RED) {
             }
         });
 
+        // Send initial state on deploy
+        sendOutput(false);
+
         node.on('close', function() {
             clearTimeout(timer);
         });
